@@ -75,38 +75,38 @@ CONSTANTS:
 *       TYPE定義
 *----------------------------------------------------------------------*
 TYPES:
-  BEGIN OF TYP_ERRDATA,    "エラー情報
-    INDEX   TYPE SY-TABIX,  "インデックス
-    LINE    TYPE I,         "項目列
-    ITEM    TYPE AS4TEXT,   "項目名
-    MESSAGE TYPE TEXT100,   "メッセージ
+  BEGIN OF TYP_ERRDATA,       "エラー情報
+    INDEX   TYPE SY-TABIX,    "インデックス
+    LINE    TYPE I,           "項目列
+    ITEM    TYPE AS4TEXT,     "項目名
+    MESSAGE TYPE TEXT100,     "メッセージ
   END   OF TYP_ERRDATA,
 
-  BEGIN OF TYP_ERRFILE,    "エラーファイル
-    DATA    TYPE CHAR4000,  "データ
-    LINE    TYPE CHAR12,    "項目列
-    ITEM    TYPE AS4TEXT,   "項目名
-    MESSAGE TYPE TEXT100,   "メッセージ
+  BEGIN OF TYP_ERRFILE,       "エラーファイル
+    DATA    TYPE CHAR4000,    "データ
+    LINE    TYPE CHAR12,      "項目列
+    ITEM    TYPE AS4TEXT,     "項目名
+    MESSAGE TYPE TEXT100,     "メッセージ
   END   OF TYP_ERRFILE,
 
-  BEGIN OF TYP_CHARTBL,     "テーブル(CHAR)
+  BEGIN OF TYP_CHARTBL,       "テーブル(CHAR)
     DATA_C(500)  TYPE C,
   END   OF TYP_CHARTBL,
 
-  BEGIN OF TYP_TBLKEY,    "テーブルキー項目
+  BEGIN OF TYP_TBLKEY,        "テーブルキー項目
     FIELDNAME  TYPE FIELDNAME,
     POSITION   TYPE TABFDPOS,
   END   OF TYP_TBLKEY,
 
-  BEGIN OF TYP_SVFILE_FL, "SVファイル(フラット)
+  BEGIN OF TYP_SVFILE_FL,     "SVファイル(フラット)
     DATA_FL    TYPE CHAR4000, "データ(フラット)
   END   OF TYP_SVFILE_FL,
 
-  BEGIN OF TYP_SVFILE,    "SVファイルデータ
+  BEGIN OF TYP_SVFILE,        "SVファイルデータ
     DATA       TYPE TABNAME16,
   END   OF TYP_SVFILE,
 
-  BEGIN OF TYP_ATTRIBUTE, "テーブル項目属性
+  BEGIN OF TYP_ATTRIBUTE,     "テーブル項目属性
     DATATYPE   TYPE DATATYPE, "データ型
     SIGN       TYPE SIGN,     "符号フラグ
   END   OF TYP_ATTRIBUTE,
@@ -148,17 +148,17 @@ SELECTION-SCREEN SKIP.
 SELECTION-SCREEN BEGIN OF BLOCK BLK1 WITH FRAME TITLE TEXT-001.
 SELECTION-SCREEN BEGIN OF BLOCK BLK2 WITH FRAME TITLE TEXT-002.
 SELECTION-SCREEN BEGIN OF LINE.
-PARAMETERS RB_TAB RADIOBUTTON GROUP FORM.          "TABファイル
+PARAMETERS RB_TAB RADIOBUTTON GROUP FORM.           "TABファイル
 SELECTION-SCREEN COMMENT 3(15)  FOR FIELD RB_TAB.
 SELECTION-SCREEN POSITION 20.
-PARAMETERS RB_CSV   RADIOBUTTON GROUP FORM.        "CSVファイル
+PARAMETERS RB_CSV   RADIOBUTTON GROUP FORM.         "CSVファイル
 SELECTION-SCREEN COMMENT 23(15) FOR FIELD RB_CSV.
 SELECTION-SCREEN END   OF LINE.
-PARAMETERS CB_HEAD  AS CHECKBOX DEFAULT CNS_X.        "ヘッダ有無
+PARAMETERS CB_HEAD  AS CHECKBOX DEFAULT CNS_X.      "ヘッダ有無
 SELECTION-SCREEN END   OF BLOCK BLK2.
 *----- アップロード
 SELECTION-SCREEN BEGIN OF LINE.
-PARAMETERS RB_UPLD RADIOBUTTON GROUP UD.             "アップロード
+PARAMETERS RB_UPLD RADIOBUTTON GROUP UD.            "アップロード
 SELECTION-SCREEN COMMENT 2(20) FOR FIELD RB_UPLD.
 SELECTION-SCREEN END   OF LINE.
 SELECTION-SCREEN BEGIN OF BLOCK BLK3 WITH FRAME TITLE TEXT-003.
@@ -176,30 +176,30 @@ SELECTION-SCREEN END   OF BLOCK BLK3.
 
 *----- ダウンロード
 SELECTION-SCREEN BEGIN OF LINE.
-PARAMETERS RB_DWNLD RADIOBUTTON GROUP UD DEFAULT 'X'.             "ダウンロード
+PARAMETERS RB_DWNLD RADIOBUTTON GROUP UD DEFAULT 'X'.   "ダウンロード
 SELECTION-SCREEN COMMENT 2(20) FOR FIELD RB_DWNLD.
 SELECTION-SCREEN END   OF LINE.
 
 SELECTION-SCREEN BEGIN OF BLOCK BLK5 WITH FRAME TITLE TEXT-005.
 SELECTION-SCREEN BEGIN OF LINE.
-PARAMETERS RB_TXS   RADIOBUTTON GROUP HEAD.        "テキスト(短)
+PARAMETERS RB_TXS   RADIOBUTTON GROUP HEAD.         "テキスト(短)
 SELECTION-SCREEN COMMENT 3(15)  FOR FIELD RB_TXS.
 SELECTION-SCREEN POSITION 20.
-PARAMETERS RB_TXR   RADIOBUTTON GROUP HEAD.        "内容説明
+PARAMETERS RB_TXR   RADIOBUTTON GROUP HEAD.         "内容説明
 SELECTION-SCREEN COMMENT 23(15) FOR FIELD RB_TXR.
 SELECTION-SCREEN END   OF LINE.
 SELECTION-SCREEN BEGIN OF LINE.
-PARAMETERS RB_TXM   RADIOBUTTON GROUP HEAD.        "テキスト(中)
+PARAMETERS RB_TXM   RADIOBUTTON GROUP HEAD.         "テキスト(中)
 SELECTION-SCREEN COMMENT 3(15)  FOR FIELD RB_TXM.
 SELECTION-SCREEN POSITION 20.
-PARAMETERS RB_TXH   RADIOBUTTON GROUP HEAD.        "ヘッダ
+PARAMETERS RB_TXH   RADIOBUTTON GROUP HEAD.         "ヘッダ
 SELECTION-SCREEN COMMENT 23(15) FOR FIELD RB_TXH.
 SELECTION-SCREEN END   OF LINE.
 SELECTION-SCREEN BEGIN OF LINE.
-PARAMETERS RB_TXL   RADIOBUTTON GROUP HEAD.       "テキスト(長)
+PARAMETERS RB_TXL   RADIOBUTTON GROUP HEAD.         "テキスト(長)
 SELECTION-SCREEN COMMENT 3(15)  FOR FIELD RB_TXL.
 SELECTION-SCREEN POSITION 20.
-PARAMETERS RB_TXI   RADIOBUTTON GROUP HEAD.       "項目名
+PARAMETERS RB_TXI   RADIOBUTTON GROUP HEAD.         "項目名
 SELECTION-SCREEN COMMENT 23(15) FOR FIELD RB_TXI.
 SELECTION-SCREEN END   OF LINE.
 SELECTION-SCREEN END   OF BLOCK BLK5.
@@ -359,9 +359,9 @@ ENDFORM.                    " MAIN_PROC
 FORM UPLOAD_METHOD .
 *----- ローカル変数定義
   DATA:
-        LTD_ULFILE_FL TYPE TYP_TD_SVFILE_FL, "SVファイル(フラット)
-        LTH_ULFILE_FL TYPE TYP_SVFILE_FL,    "SVファイル(フラット)ヘッダ
-        LTD_ULFILE_HD TYPE TYP_TD_SVFILE,    "SVファイルヘッダ
+        LTD_ULFILE_FL TYPE TYP_TD_SVFILE_FL,  "SVファイル(フラット)
+        LTH_ULFILE_FL TYPE TYP_SVFILE_FL,     "SVファイル(フラット)ヘッダ
+        LTD_ULFILE_HD TYPE TYP_TD_SVFILE,     "SVファイルヘッダ
         LW_SUBRC      TYPE SY-SUBRC.
 
 *----- SVファイルのアップロード
@@ -380,15 +380,15 @@ FORM UPLOAD_METHOD .
 *----- ヘッダ行の退避及び削除
   IF CB_HEAD = CNS_X.
     PERFORM DELETE_HEADER CHANGING
-                          LTD_ULFILE_FL "SVファイル(フラット)
-                          LTH_ULFILE_FL "SVファイル(フラット)ヘッダ
-                          LTD_ULFILE_HD."内部TAB・SVファイルヘッダ
+                          LTD_ULFILE_FL       "SVファイル(フラット)
+                          LTH_ULFILE_FL       "SVファイル(フラット)ヘッダ
+                          LTD_ULFILE_HD.      "内部TAB・SVファイルヘッダ
   ENDIF.
 
 *----- データチェック
-  PERFORM CHECK_DATA USING LTD_ULFILE_FL  "SVファイル(フラット)
-                           LTH_ULFILE_FL  "SVファイル(フラット)ヘッダ
-                           LTD_ULFILE_HD. "内部TAB・SVファイルヘッダ
+  PERFORM CHECK_DATA USING LTD_ULFILE_FL      "SVファイル(フラット)
+                           LTH_ULFILE_FL      "SVファイル(フラット)ヘッダ
+                           LTD_ULFILE_HD.     "内部TAB・SVファイルヘッダ
 
 *----- テーブル更新
   PERFORM MODIFY_TABLE.
@@ -467,18 +467,18 @@ FORM CHECK_DATA USING I_TD_ULFILE_FL TYPE TYP_TD_SVFILE_FL
                       I_TD_ULFILE_HD TYPE TYP_TD_SVFILE.
 
 *----- ローカル変数定義
-  DATA: LTD_DFIES     TYPE TYP_TD_DFIES,     "テーブル項目属性
-        LTD_ERRDATA   TYPE TYP_TD_ERRDATA,   "エラー情報
-        LTD_SVFILE_FL TYPE TYP_TD_SVFILE_FL, "エラーファイル
-        LW_VAL        TYPE I.                "項目数(テーブル)
+  DATA: LTD_DFIES     TYPE TYP_TD_DFIES,      "テーブル項目属性
+        LTD_ERRDATA   TYPE TYP_TD_ERRDATA,    "エラー情報
+        LTD_SVFILE_FL TYPE TYP_TD_SVFILE_FL,  "エラーファイル
+        LW_VAL        TYPE I.                 "項目数(テーブル)
 
 *----- テーブル属性の取得
-  PERFORM GET_FIELDINFO CHANGING LTD_DFIES. "テーブル項目属性
+  PERFORM GET_FIELDINFO CHANGING LTD_DFIES.   "テーブル項目属性
 *----- 項目チェック
-  PERFORM CHECK_ITEM USING    I_TD_ULFILE_FL "SVファイル(フラット)
-                              LTD_DFIES      "テーブル項目属性
-                              I_TD_ULFILE_HD "SVファイルヘッダ
-                     CHANGING LTD_ERRDATA.   "エラー情報
+  PERFORM CHECK_ITEM USING    I_TD_ULFILE_FL  "SVファイル(フラット)
+                              LTD_DFIES       "テーブル項目属性
+                              I_TD_ULFILE_HD  "SVファイルヘッダ
+                     CHANGING LTD_ERRDATA.    "エラー情報
 *----- エラーファイルのダウンロード
   IF LTD_ERRDATA IS NOT INITIAL.
     LW_VAL = LINES( LTD_DFIES ).                  "項目数(テーブル)
@@ -575,12 +575,12 @@ FORM CHECK_ITEM  USING    I_TD_ULFILE_FL TYPE TYP_TD_SVFILE_FL
           INTO LTH_ULFILE_HD.          "項目名
         ENDIF.
 *----- 各項目チェック
-        PERFORM CHECK_ITEM_INDI USING     LW_DFIES     "テーブル項目属性
-                                          LTH_CHARTBL  "チェック対象項目
+        PERFORM CHECK_ITEM_INDI USING     LW_DFIES      "テーブル項目属性
+                                          LTH_CHARTBL   "チェック対象項目
                                           LCTR_LINE     "項目列
                                           LTH_ULFILE_HD "項目名
                                           LW_TABIX      "索引
-                                CHANGING  LTH_ERRDATA. "エラー情報用構造
+                                CHANGING  LTH_ERRDATA.  "エラー情報用構造
 *===== 091221 ADD START
       ENDIF.
 *===== 091221 ADD END
@@ -625,49 +625,49 @@ FORM CHECK_ITEM_INDI  USING    I_W_DFIES      TYPE DFIES
       OR CNS_PREC
       OR CNS_QUAN.
 *----- 数値チェック
-      PERFORM CHECK_ITEM_NUM USING    I_TH_CHARTBL "チェック対象項目
-                                      I_W_DFIES    "テーブル項目属性
-                                      I_CTR_LINE     "項目列
-                                      I_TH_ULFILE_HD "項目名
-                                      I_W_TABIX      "索引
-                             CHANGING O_TH_ERRDATA."エラー情報用構造
+      PERFORM CHECK_ITEM_NUM USING    I_TH_CHARTBL    "チェック対象項目
+                                      I_W_DFIES       "テーブル項目属性
+                                      I_CTR_LINE      "項目列
+                                      I_TH_ULFILE_HD  "項目名
+                                      I_W_TABIX       "索引
+                             CHANGING O_TH_ERRDATA.   "エラー情報用構造
     WHEN CNS_ACCP
       OR CNS_DATS.
 *----- 日付チェック
-      PERFORM CHECK_ITEM_DATE USING I_TH_CHARTBL   "チェック対象項目
-                                    I_CTR_LINE     "項目列
-                                    I_TH_ULFILE_HD "項目名
-                                    I_W_TABIX      "索引
-                                    I_W_DFIES      "テーブル属性
-                           CHANGING O_TH_ERRDATA.  "エラー情報用構造
+      PERFORM CHECK_ITEM_DATE USING I_TH_CHARTBL      "チェック対象項目
+                                    I_CTR_LINE        "項目列
+                                    I_TH_ULFILE_HD    "項目名
+                                    I_W_TABIX         "索引
+                                    I_W_DFIES         "テーブル属性
+                           CHANGING O_TH_ERRDATA.     "エラー情報用構造
     WHEN CNS_TIMS.
 *----- 時刻チェック
-      PERFORM CHECK_ITEM_TIME USING I_TH_CHARTBL"チェック対象項目
-                                    I_CTR_LINE     "項目列
-                                    I_TH_ULFILE_HD "項目名
-                                    I_W_TABIX      "索引
-                           CHANGING O_TH_ERRDATA.  "エラー情報用構造
+      PERFORM CHECK_ITEM_TIME USING I_TH_CHARTBL      "チェック対象項目
+                                    I_CTR_LINE        "項目列
+                                    I_TH_ULFILE_HD    "項目名
+                                    I_W_TABIX         "索引
+                           CHANGING O_TH_ERRDATA.     "エラー情報用構造
     WHEN CNS_CUKY.
 *----- 通貨コードチェック
-      PERFORM CHECK_ITEM_WAERS USING I_TH_CHARTBL "チェック対象項目
-                                     I_CTR_LINE     "項目列
-                                     I_TH_ULFILE_HD "項目名
-                                     I_W_TABIX      "索引
-                            CHANGING O_TH_ERRDATA. "エラー情報用構造
+      PERFORM CHECK_ITEM_WAERS USING I_TH_CHARTBL     "チェック対象項目
+                                     I_CTR_LINE       "項目列
+                                     I_TH_ULFILE_HD   "項目名
+                                     I_W_TABIX        "索引
+                            CHANGING O_TH_ERRDATA.    "エラー情報用構造
     WHEN CNS_LANG.
 *----- 言語キーチェック
-      PERFORM CHECK_ITEM_SPRAS USING I_TH_CHARTBL"チェック対象項目
-                                     I_CTR_LINE     "項目列
-                                     I_TH_ULFILE_HD "項目名
-                                     I_W_TABIX      "索引
-                            CHANGING O_TH_ERRDATA. "エラー情報用構造
+      PERFORM CHECK_ITEM_SPRAS USING I_TH_CHARTBL     "チェック対象項目
+                                     I_CTR_LINE       "項目列
+                                     I_TH_ULFILE_HD   "項目名
+                                     I_W_TABIX        "索引
+                            CHANGING O_TH_ERRDATA.    "エラー情報用構造
     WHEN CNS_UNIT.
 *----- 数量単位キーチェック
-      PERFORM CHECK_ITEM_MSEHI USING I_TH_CHARTBL "チェック対象項目
-                                     I_CTR_LINE     "項目列
-                                     I_TH_ULFILE_HD "項目名
-                                     I_W_TABIX      "索引
-                            CHANGING O_TH_ERRDATA. "エラー情報用構造
+      PERFORM CHECK_ITEM_MSEHI USING I_TH_CHARTBL     "チェック対象項目
+                                     I_CTR_LINE       "項目列
+                                     I_TH_ULFILE_HD   "項目名
+                                     I_W_TABIX        "索引
+                            CHANGING O_TH_ERRDATA.    "エラー情報用構造
     WHEN OTHERS.
       ASSIGN COMPONENT I_CTR_LINE OF STRUCTURE
                                     <HDR_FIELD> TO <FS_VAL>.
@@ -720,12 +720,12 @@ FORM CHECK_ITEM_NUM USING    I_TH_CHARTBL   TYPE TYP_CHARTBL
           LW_TEXT = TEXT-012.
       ENDCASE.
 *----- エラー情報格納
-      PERFORM EDIT_ERRDATA USING    I_W_TABIX      "インデックス
-                                    I_CTR_LINE     "項目列
-                                    I_TH_ULFILE_HD "項目名
-                                    CNS_108        "メッセージ番号
-                                    LW_TEXT        "メッセージ
-                           CHANGING O_TH_ERRDATA.  "エラー情報
+      PERFORM EDIT_ERRDATA USING    I_W_TABIX       "インデックス
+                                    I_CTR_LINE      "項目列
+                                    I_TH_ULFILE_HD  "項目名
+                                    CNS_108         "メッセージ番号
+                                    LW_TEXT         "メッセージ
+                           CHANGING O_TH_ERRDATA.   "エラー情報
     ELSE.
       IF I_W_DFIES-SIGN <> CNS_X. "符号フラグ:OFFの場合
 *----- 符号チェック
@@ -797,12 +797,12 @@ FORM CHECK_ITEM_DATE USING    I_TH_CHARTBL   TYPE TYP_CHARTBL
         PLAUSIBILITY_CHECK_FAILED = 1
         OTHERS                    = 2.
     IF SY-SUBRC <> 0.
-      PERFORM EDIT_ERRDATA USING I_W_TABIX      "インデックス
-                                 I_CTR_LINE     "項目列
-                                 I_TH_ULFILE_HD "項目名
-                                 CNS_108        "メッセージ番号
-                                 TEXT-013       "メッセージ用変数
-                        CHANGING O_TH_ERRDATA.  "エラー情報
+      PERFORM EDIT_ERRDATA USING I_W_TABIX        "インデックス
+                                 I_CTR_LINE       "項目列
+                                 I_TH_ULFILE_HD   "項目名
+                                 CNS_108          "メッセージ番号
+                                 TEXT-013         "メッセージ用変数
+                        CHANGING O_TH_ERRDATA.    "エラー情報
     ELSE.
       ASSIGN COMPONENT I_CTR_LINE OF STRUCTURE <HDR_FIELD> TO <FS_VAL>.
       <FS_VAL> = I_TH_CHARTBL.
@@ -841,12 +841,12 @@ FORM CHECK_ITEM_TIME USING    I_TH_CHARTBL   TYPE TYP_CHARTBL
       ASSIGN COMPONENT I_CTR_LINE OF STRUCTURE <HDR_FIELD> TO <FS_VAL>.
       <FS_VAL> = I_TH_CHARTBL.
     ELSE.
-      PERFORM EDIT_ERRDATA USING I_W_TABIX       "インデックス
-                                 I_CTR_LINE     "項目列
-                                 I_TH_ULFILE_HD "項目名
-                                 CNS_108        "メッセージ番号
-                                 TEXT-021       "メッセージ用変数
-                        CHANGING O_TH_ERRDATA.  "エラー情報
+      PERFORM EDIT_ERRDATA USING I_W_TABIX        "インデックス
+                                 I_CTR_LINE       "項目列
+                                 I_TH_ULFILE_HD   "項目名
+                                 CNS_108          "メッセージ番号
+                                 TEXT-021         "メッセージ用変数
+                        CHANGING O_TH_ERRDATA.    "エラー情報
     ENDIF.
   ENDIF.
 ENDFORM.                    " CHECK_ITEM_TIME
@@ -877,12 +877,12 @@ FORM CHECK_ITEM_WAERS USING    I_TH_CHARTBL   TYPE TYP_CHARTBL
      WHERE WAERS = I_TH_CHARTBL.
 
     IF SY-SUBRC <> 0.
-      PERFORM EDIT_ERRDATA USING I_W_TABIX      "インデックス
-                                 I_CTR_LINE     "項目列
-                                 I_TH_ULFILE_HD "項目名
-                                 CNS_108        "メッセージ番号
-                                 TEXT-014       "メッセージ用変数
-                        CHANGING O_TH_ERRDATA.  "エラー情報
+      PERFORM EDIT_ERRDATA USING I_W_TABIX        "インデックス
+                                 I_CTR_LINE       "項目列
+                                 I_TH_ULFILE_HD   "項目名
+                                 CNS_108          "メッセージ番号
+                                 TEXT-014         "メッセージ用変数
+                        CHANGING O_TH_ERRDATA.    "エラー情報
     ELSE.
       ASSIGN COMPONENT I_CTR_LINE OF STRUCTURE <HDR_FIELD> TO <FS_VAL>.
       <FS_VAL> = I_TH_CHARTBL.
@@ -916,12 +916,12 @@ FORM CHECK_ITEM_SPRAS USING    I_TH_CHARTBL   TYPE TYP_CHARTBL
      WHERE SPRAS = I_TH_CHARTBL.
 
     IF SY-SUBRC <> 0.
-      PERFORM EDIT_ERRDATA USING I_W_TABIX      "インデックス
-                                 I_CTR_LINE     "項目列
-                                 I_TH_ULFILE_HD "項目名
-                                 CNS_108        "メッセージ番号
-                                 TEXT-015       "メッセージ用変数
-                        CHANGING O_TH_ERRDATA.  "エラー情報
+      PERFORM EDIT_ERRDATA USING I_W_TABIX        "インデックス
+                                 I_CTR_LINE       "項目列
+                                 I_TH_ULFILE_HD   "項目名
+                                 CNS_108          "メッセージ番号
+                                 TEXT-015         "メッセージ用変数
+                        CHANGING O_TH_ERRDATA.    "エラー情報
     ELSE.
       ASSIGN COMPONENT I_CTR_LINE OF STRUCTURE <HDR_FIELD> TO <FS_VAL>.
       <FS_VAL> = I_TH_CHARTBL.
@@ -955,12 +955,12 @@ FORM CHECK_ITEM_MSEHI USING    I_TH_CHARTBL   TYPE TYP_CHARTBL
      WHERE MSEHI = I_TH_CHARTBL.
 
     IF SY-SUBRC <> 0.
-      PERFORM EDIT_ERRDATA USING I_W_TABIX      "インデックス
-                                 I_CTR_LINE     "項目列
-                                 I_TH_ULFILE_HD "項目名
-                                 CNS_108        "メッセージ番号
-                                 TEXT-016       "メッセージ用変数
-                        CHANGING O_TH_ERRDATA.  "エラー情報
+      PERFORM EDIT_ERRDATA USING I_W_TABIX        "インデックス
+                                 I_CTR_LINE       "項目列
+                                 I_TH_ULFILE_HD   "項目名
+                                 CNS_108          "メッセージ番号
+                                 TEXT-016         "メッセージ用変数
+                        CHANGING O_TH_ERRDATA.    "エラー情報
     ELSE.
       ASSIGN COMPONENT I_CTR_LINE OF STRUCTURE <HDR_FIELD> TO <FS_VAL>.
       <FS_VAL> = I_TH_CHARTBL.
@@ -986,9 +986,9 @@ FORM EDIT_ERRDATA  USING    I_W_TABIX      TYPE SY-TABIX
                             I_W_TEXT       TYPE ITEX132
                    CHANGING O_TH_ERRDATA   TYPE TYP_ERRDATA.
 
-  O_TH_ERRDATA-INDEX   = I_W_TABIX.      "インデックス
-  O_TH_ERRDATA-LINE    = I_CTR_LINE.     "項目列
-  O_TH_ERRDATA-ITEM    = I_TH_ULFILE_HD. "項目名
+  O_TH_ERRDATA-INDEX   = I_W_TABIX.               "インデックス
+  O_TH_ERRDATA-LINE    = I_CTR_LINE.              "項目列
+  O_TH_ERRDATA-ITEM    = I_TH_ULFILE_HD.          "項目名
   MESSAGE ID CNS_ZC01 TYPE CNS_E NUMBER I_W_NUM WITH I_W_TEXT
   INTO O_TH_ERRDATA-MESSAGE.             "メッセージ
 
@@ -1011,10 +1011,10 @@ FORM ERRFILE_DOWNLOAD USING    I_TD_ULFILE_FL TYPE TYP_TD_SVFILE_FL
                       CHANGING O_TD_SVFILE_FL TYPE TYP_TD_SVFILE_FL.
 
 *----- ローカル変数定義
-  DATA: LTD_ERRFILE   TYPE TYP_TD_ERRFILE,   "エラーファイル
-        LTH_ERRFILE   TYPE TYP_ERRFILE,      "エラーファイルヘッダ
-        LTD_SVFILE_FL TYPE TYP_TD_SVFILE_FL, "SVファイル(フラット)
-        LW_FLNAM      TYPE RLGRAP-FILENAME,  "エラーファイル名
+  DATA: LTD_ERRFILE   TYPE TYP_TD_ERRFILE,        "エラーファイル
+        LTH_ERRFILE   TYPE TYP_ERRFILE,           "エラーファイルヘッダ
+        LTD_SVFILE_FL TYPE TYP_TD_SVFILE_FL,      "SVファイル(フラット)
+        LW_FLNAM      TYPE RLGRAP-FILENAME,       "エラーファイル名
         LW_SUBRC      TYPE SY-SUBRC.
 
 *----- ヘッダ部の作成
@@ -1030,9 +1030,9 @@ FORM ERRFILE_DOWNLOAD USING    I_TD_ULFILE_FL TYPE TYP_TD_SVFILE_FL
                         CHANGING LTD_SVFILE_FL.
 
 *----- データ行の作成
-  PERFORM EDIT_ERRFILE USING    LTD_SVFILE_FL "SVファイル(フラット)
-                                I_TD_ERRDATA  "エラー情報
-                       CHANGING LTD_ERRFILE.  "エラーファイル
+  PERFORM EDIT_ERRFILE USING    LTD_SVFILE_FL     "SVファイル(フラット)
+                                I_TD_ERRDATA      "エラー情報
+                       CHANGING LTD_ERRFILE.      "エラーファイル
 
 *----- エラーファイル(フラット)の作成
   PERFORM ADJUST_ITEM_NUM USING    I_W_VAL
@@ -1041,11 +1041,11 @@ FORM ERRFILE_DOWNLOAD USING    I_TD_ULFILE_FL TYPE TYP_TD_SVFILE_FL
   PERFORM ADD_DELIMITER USING    LTD_ERRFILE
                         CHANGING O_TD_SVFILE_FL.
 *----- ファイル名の編集
-  PERFORM EDIT_FLNAM CHANGING LW_FLNAM. "エラーファイル名
+  PERFORM EDIT_FLNAM CHANGING LW_FLNAM.           "エラーファイル名
 *----- ダウンロード
-  PERFORM A_SV_DOWNLOAD USING    LW_FLNAM       "エラーファイル名
+  PERFORM A_SV_DOWNLOAD USING    LW_FLNAM         "エラーファイル名
                                  SPACE
-                        CHANGING O_TD_SVFILE_FL "SVファイル(フラット)
+                        CHANGING O_TD_SVFILE_FL   "SVファイル(フラット)
                                  LW_SUBRC.
   IF LW_SUBRC <> 0.
     MESSAGE S491(ZC01) DISPLAY LIKE CNS_E.
@@ -1071,11 +1071,11 @@ FORM EDIT_ERRFILE  USING    I_TD_SVFILE_FL TYPE TYP_TD_SVFILE_FL
                             I_TD_ERRDATA   TYPE TYP_TD_ERRDATA
                    CHANGING O_TD_ERRFILE   TYPE TYP_TD_ERRFILE.
 *----- ローカル変数定義
-  DATA: LTH_SVFILE_FL TYPE TYP_SVFILE_FL,    "SVファイル(フラット)ヘッダ
-        LTH_ERRDATA   TYPE TYP_ERRDATA,      "エラー情報ヘッダ
-        LTH_ERRFILE   TYPE TYP_ERRFILE,      "エラーファイルヘッダ
+  DATA: LTH_SVFILE_FL TYPE TYP_SVFILE_FL,         "SVファイル(フラット)ヘッダ
+        LTH_ERRDATA   TYPE TYP_ERRDATA,           "エラー情報ヘッダ
+        LTH_ERRFILE   TYPE TYP_ERRFILE,           "エラーファイルヘッダ
         LW_TABIX      TYPE SY-TABIX,
-        LW_LINE       TYPE STRING.           "項目列
+        LW_LINE       TYPE STRING.                "項目列
 
   LOOP AT I_TD_SVFILE_FL INTO LTH_SVFILE_FL.
     LW_TABIX = SY-TABIX.
@@ -1086,12 +1086,12 @@ FORM EDIT_ERRFILE  USING    I_TD_SVFILE_FL TYPE TYP_TD_SVFILE_FL
     WITH KEY INDEX = LW_TABIX
     INTO LTH_ERRDATA.
 *----- データセット
-    LTH_ERRFILE-DATA    = LTH_SVFILE_FL.       "データ
+    LTH_ERRFILE-DATA    = LTH_SVFILE_FL.          "データ
     IF LTH_ERRDATA IS NOT INITIAL.
-      LW_LINE             = LTH_ERRDATA-LINE.    "項目列
+      LW_LINE             = LTH_ERRDATA-LINE.     "項目列
       LTH_ERRFILE-LINE    = LW_LINE.
-      LTH_ERRFILE-ITEM    = LTH_ERRDATA-ITEM.    "項目名
-      LTH_ERRFILE-MESSAGE = LTH_ERRDATA-MESSAGE. "メッセージ
+      LTH_ERRFILE-ITEM    = LTH_ERRDATA-ITEM.     "項目名
+      LTH_ERRFILE-MESSAGE = LTH_ERRDATA-MESSAGE.  "メッセージ
     ENDIF.
     APPEND LTH_ERRFILE TO O_TD_ERRFILE.
   ENDLOOP.
@@ -1107,11 +1107,11 @@ ENDFORM.                    " EDIT_ERRFILE
 FORM ADJUST_ITEM_NUM  USING    I_W_VAL        TYPE I
                       CHANGING O_TD_ERRFILE   TYPE TYP_TD_ERRFILE.
 *----- ローカル変数定義
-  DATA: LTD_SVFILE_FL  TYPE TYP_TD_SVFILE_FL, "SVファイル(フラット)
+  DATA: LTD_SVFILE_FL  TYPE TYP_TD_SVFILE_FL,     "SVファイル(フラット)
         LTD_SVFILE_SP  TYPE TYP_TD_SVFILE_FL,
-                                         "エラーファイル(フラット)分割済
-        LTH_SVFILE_FL  TYPE TYP_SVFILE_FL,   "SVファイル(フラット)ヘッダ
-        LW_SEPARATOR   TYPE CHAR01.           "区切り文字
+                                                  "エラーファイル(フラット)分割済
+        LTH_SVFILE_FL  TYPE TYP_SVFILE_FL,        "SVファイル(フラット)ヘッダ
+        LW_SEPARATOR   TYPE CHAR01.               "区切り文字
   FIELD-SYMBOLS:
         <LFS>          TYPE TYP_ERRFILE.
 
@@ -1219,15 +1219,15 @@ ENDFORM.                    " MODIFY_TABLE
 FORM DOWNLOAD_METHOD .
 
 *----- ローカル変数定義
-  DATA: LTD_TBLKEY     TYPE TYP_TD_TBLKEY,    "テーブルキー項目
-        LTD_TABLES_TAB TYPE TYP_TD_RSDSTABS,  "対象テーブル
-        LTD_FIELDS_TAB TYPE TYP_TD_RSDSFIELDS,"選択項目
-        LTD_WHERES     TYPE RSDS_TWHERE,      "内部テーブル・選択条件
-        LW_WHERES      TYPE STRING,           "変数・選択条件
-        LW_DYNSELID    TYPE DYNSELID.         "動的選択ID
+  DATA: LTD_TBLKEY     TYPE TYP_TD_TBLKEY,        "テーブルキー項目
+        LTD_TABLES_TAB TYPE TYP_TD_RSDSTABS,      "対象テーブル
+        LTD_FIELDS_TAB TYPE TYP_TD_RSDSFIELDS,    "選択項目
+        LTD_WHERES     TYPE RSDS_TWHERE,          "内部テーブル・選択条件
+        LW_WHERES      TYPE STRING,               "変数・選択条件
+        LW_DYNSELID    TYPE DYNSELID.             "動的選択ID
 
 *----- データの抽出
-  PERFORM SELECT_DOWNLOAD_DATA USING LW_WHERES. "変数・選択条件
+  PERFORM SELECT_DOWNLOAD_DATA USING LW_WHERES.   "変数・選択条件
 
 *----- ファイルダウンロード
   PERFORM FILE_DOWNLOAD.
@@ -1242,8 +1242,8 @@ ENDFORM.                    " DOWNLOAD_METHOD
 *----------------------------------------------------------------------*
 FORM GET_TBLKEY  CHANGING O_TD_TBLKEY TYPE TYP_TD_TBLKEY.
 
-  SELECT FIELDNAME             "項目名
-         POSITION              "テーブル内の項目位置
+  SELECT FIELDNAME              "項目名
+         POSITION               "テーブル内の項目位置
     FROM DD03L
     INTO TABLE O_TD_TBLKEY
    WHERE TABNAME   =  P_TABNM   "テーブル名
@@ -1387,10 +1387,10 @@ ENDFORM.                    " SELECT_DOWNLOAD_DATA
 *----------------------------------------------------------------------*
 FORM FILE_DOWNLOAD .
 *----- ローカル変数定義
-  DATA: LTD_SVFILE_FL TYPE TYP_TD_SVFILE_FL, "SVファイル(フラット)
+  DATA: LTD_SVFILE_FL TYPE TYP_TD_SVFILE_FL,    "SVファイル(フラット)
         LW_SUBRC      TYPE SY-SUBRC,
         LW_NUM        TYPE I,
-        LW_MSGTX(255) TYPE C.    "処理件数
+        LW_MSGTX(255) TYPE C.                   "処理件数
 
 *----- データ部の作成
   PERFORM ADD_DELIMITER USING    <TAB_FIELD>
@@ -1466,8 +1466,8 @@ FORM EDIT_HEAD CHANGING O_TD_SVFILE_FL TYPE TYP_TD_SVFILE_FL.
   PERFORM GET_FIELDINFO CHANGING LTD_DFIES. "テーブル項目属性
 *----- ヘッダ行の作成
   IF CB_HEAD = CNS_X.
-    PERFORM MAKE_HEAD USING LTD_DFIES      "テーブル項目属性
-                   CHANGING LTH_DLFILE_FL. "SVファイル(フラット)ヘッダ
+    PERFORM MAKE_HEAD USING LTD_DFIES       "テーブル項目属性
+                   CHANGING LTH_DLFILE_FL.  "SVファイル(フラット)ヘッダ
 *----- ヘッダ行の追加
     INSERT LTH_DLFILE_FL INTO O_TD_SVFILE_FL INDEX 1.
   ENDIF.
@@ -1747,8 +1747,8 @@ FORM A_SV_DOWNLOAD_APPEND   USING    I_FULLPATH  TYPE ANY
   DATA:
 *    ltd_itab     TYPE TABLE OF typ_a003_itab,
 *    LW_HEADER    TYPE XSTRING,                   " ヘッダー
-    LW_FULLPATH  TYPE STRING,                    " フルパス
-    LW_FULLTYPE  TYPE CHAR10.                    " ファイルタイプ
+    LW_FULLPATH  TYPE STRING,                     " フルパス
+    LW_FULLTYPE  TYPE CHAR10.                     " ファイルタイプ
 *
 *  CLEAR: LW_HEADER.
 *  IF I_HEADER IS NOT INITIAL.
@@ -1821,8 +1821,8 @@ FORM A_SV_UPLOAD  USING      I_FULLPATH  TYPE ANY
     LTH_ULFILE   TYPE TYP_SVFILE_FL,
     LW_EXIT      TYPE CHAR1.
   FIELD-SYMBOLS:
-    <LFS_COMPS>  TYPE ANY,                " for work
-    <LFS_DDITM>  TYPE ANY.                " for work
+    <LFS_COMPS>  TYPE ANY,                      " for work
+    <LFS_DDITM>  TYPE ANY.                      " for work
 *
   LW_FULLPATH =   I_FULLPATH.
   LW_FULLTYPE =   CNS_A003_ASC.
