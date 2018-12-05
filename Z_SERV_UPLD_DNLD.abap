@@ -56,7 +56,7 @@ CONSTANTS:
   CNS_LANG(4)   TYPE C         VALUE 'LANG',
   CNS_UNIT(4)   TYPE C         VALUE 'UNIT',
   CNS_100000(6) TYPE C         VALUE '100000',
-  CNS_ZC01(6) TYPE C         VALUE 'ZC01',
+  CNS_ZC01(6)   TYPE C         VALUE 'ZC01',
   CNS_MANDT(5)  TYPE C         VALUE 'MANDT',
   CNS_000000(6) TYPE C         VALUE '000000',
   CNS_PARTITION TYPE CHAR1     VALUE '/',
@@ -66,7 +66,11 @@ CONSTANTS:
   CNS_ERROR(4)  TYPE C         VALUE '_ERR',
 *===== 091222 UPDATE END
   CNS_TRANSP(6) TYPE C         VALUE 'TRANSP',
-  CNS_00000000(8) TYPE C       VALUE '00000000'.
+  CNS_00000000(8) TYPE C       VALUE '00000000',
+  CNS_COMMA     TYPE C VALUE ',',     " カンマ
+  CNS_TAB       TYPE C VALUE CL_ABAP_CHAR_UTILITIES=>HORIZONTAL_TAB,
+  CNS_LF        TYPE C VALUE CL_ABAP_CHAR_UTILITIES=>NEWLINE.
+
 *----------------------------------------------------------------------*
 *       TYPE定義
 *----------------------------------------------------------------------*
@@ -1203,8 +1207,8 @@ FORM MODIFY_TABLE .
   ELSE.
 *----- ROLLBACK
     ROLLBACK WORK.
-    MESSAGE S494(ZC01) WITH 'TABLEID' LW_INUM SY-SUBRC DISPLAY LIKE CNS_E.
-*   テーブル &1 の &2 に失敗しました(RC=:&3)
+    MESSAGE S494(ZC01) WITH LW_INUM DISPLAY LIKE CNS_E.
+*   テーブル &1 に失敗しました
   ENDIF.
 ENDFORM.                    " MODIFY_TABLE
 *&---------------------------------------------------------------------*
@@ -1433,25 +1437,16 @@ FORM ADD_DELIMITER  USING    I_TD_ANY    TYPE ANY
     LW_SEPARATE = CNS_C. "カンマ区切り
   ENDIF.
 *----- 区切り文字の付加
-*  CALL FUNCTION 'Z_AKS_SEP_STRCTER'
-  CALL FUNCTION 'ZZ_C_SEP_STRCTER'
-    EXPORTING
-      I_PROCESS      = CNS_O          "区切り文字付加
-      I_SEPARATE     = LW_SEPARATE    "区切り文字
-      T_INFILE       = I_TD_ANY       "抽出データ
-    IMPORTING
-      T_OUTFILE      = O_TD_ANY       "区切り文字付加データ
-    EXCEPTIONS
-      PARAMETER_ERROR = 1
-      CRKUBUN_ERROR   = 2
-      INPUTFILE_ERROR = 3
-      OTHERS          = 4.
-  IF SY-SUBRC <> 0.
-    MESSAGE ID SY-MSGID TYPE CNS_S NUMBER SY-MSGNO
-            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4
-            DISPLAY LIKE CNS_E.
-    LEAVE LIST-PROCESSING.
-  ENDIF.
+  PERFORM SEPARATE_STRCTER USING    LW_SEPARATE   "区切り文字
+                                    I_TD_ANY      "抽出データ
+                           CHANGING O_TD_ANY.     "区切り文字付加データ
+
+***  IF SY-SUBRC <> 0.
+***    MESSAGE ID SY-MSGID TYPE CNS_S NUMBER SY-MSGNO
+***            WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4
+***            DISPLAY LIKE CNS_E.
+***    LEAVE LIST-PROCESSING.
+***  ENDIF.
 
 ENDFORM.                    " ADD_DELIMITER
 *&---------------------------------------------------------------------*
@@ -2003,3 +1998,105 @@ FORM A_FILE_NAME_SEPARATE   USING     I_FULLPATH  TYPE ANY
   ENDDO.
 *
 ENDFORM.                    " A_GET_FILE_DIRECTORY
+*&---------------------------------------------------------------------*
+*&      Form  SEPARATE_STRCTER
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  LW_SEPARATE     区切り文字
+*  -->  I_TD_ANY        抽出データ
+*  <--  O_TD_ANY        区切り文字付加データ
+*----------------------------------------------------------------------*
+FORM SEPARATE_STRCTER USING    LW_SEPARATE TYPE CHAR01
+                               I_TD_ANY    TYPE TABLE
+                      CHANGING O_TD_ANY    TYPE TABLE.
+
+*----- 処理区分判定
+  IF LW_SEPARATE = CNS_C.
+*----- カンマ付加
+    PERFORM EDIT_CSVDATA USING    CNS_COMMA
+                                  I_TD_ANY
+                         CHANGING O_TD_ANY.
+  ELSEIF LW_SEPARATE = CNS_T.
+*----- TAB付加
+    PERFORM EDIT_CSVDATA USING    CNS_TAB
+                                  I_TD_ANY
+                         CHANGING O_TD_ANY.
+  ENDIF.
+
+ENDFORM.                    " SEPARATE_STRCTER
+*&---------------------------------------------------------------------*
+*&      Form  EDIT_CSVDATA
+*&---------------------------------------------------------------------*
+*       区切り付加
+*----------------------------------------------------------------------*
+*   <-- I_COMMA         区切り文字
+*   --> I_TD_ANY        抽出データ
+*   <-- O_TD_ANY        区切り文字付加データ
+*----------------------------------------------------------------------*
+FORM EDIT_CSVDATA USING    I_COMMA   TYPE C
+                           I_TD_ANY  TYPE TABLE
+                  CHANGING O_TD_ANY  TYPE TABLE.
+  DATA:
+    LW_LF           TYPE C,
+    LW_LENGTH       TYPE SY-INDEX,
+    LW_SKOMOKU      TYPE STRING,
+    LW_DATA         TYPE CRMCH4000,
+    LW_KOMOKU       TYPE CRMCH4000,
+    LST_OUT_DATA    TYPE REF TO DATA,
+    LCTR_LOOP        TYPE I.           " ループカウント用
+
+
+  FIELD-SYMBOLS:
+    <LST>      TYPE ANY,
+    <LTD_OUT>  TYPE STANDARD TABLE,
+    <LST_OUT>  TYPE ANY,
+    <LKOMOKU>  TYPE ANY,              " 項目値格納用
+    <LKOMOKU2> TYPE ANY.              " 項目値格納用
+
+  ASSIGN I_TD_ANY  TO <LST>.
+  ASSIGN O_TD_ANY TO <LTD_OUT>.
+
+*----- 作業領域の作成
+  CREATE DATA LST_OUT_DATA LIKE LINE OF <LTD_OUT>.
+  ASSIGN LST_OUT_DATA->* TO <LST_OUT>.
+
+*----- CRコード抜き取り
+  LW_LF = CNS_LF.
+
+*----- 出力内部テーブルの先頭項目のアサイン
+  ASSIGN COMPONENT 1 OF STRUCTURE O_TD_ANY TO <LKOMOKU2>.
+
+*----- 変換前データをループ
+  LOOP AT I_TD_ANY ASSIGNING <LST>.
+    CLEAR :
+      LW_DATA,
+      LCTR_LOOP.
+
+    DO.
+*----- 項目値取得
+      LCTR_LOOP = LCTR_LOOP + 1.
+      ASSIGN COMPONENT LCTR_LOOP OF STRUCTURE <LST> TO <LKOMOKU>.
+
+      IF SY-SUBRC <> 0.
+*----- 項目値無し
+        EXIT.
+      ELSE.
+        LW_SKOMOKU = <LKOMOKU>.   " 不要な空白を削除
+        LW_KOMOKU  = LW_SKOMOKU.
+*----- 区切り文字付加
+        CONCATENATE LW_DATA LW_KOMOKU I_COMMA
+               INTO LW_DATA.
+
+      ENDIF.
+    ENDDO.
+
+    LW_LENGTH            = STRLEN( LW_DATA ) - 1.
+    LW_DATA+LW_LENGTH(1) = SPACE.
+
+    <LST_OUT> = LW_DATA.
+*----- 変換後データを格納
+    APPEND <LST_OUT> TO O_TD_ANY.
+  ENDLOOP.
+
+ENDFORM.                    " EDIT_CSVDATA
